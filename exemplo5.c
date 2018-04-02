@@ -9,10 +9,15 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
+
+// Adicionado manualmente wait e stdlib
+#include <sys/wait.h>
 #include <stdio.h>
+
+#include <stdlib.h>
 #include <unistd.h>
 
-main() {
+int main(void) {
 	// Simultaneamente lidando com depositos e saques
 
 	struct area { //área de compartilhamento de meḿória
@@ -201,15 +206,15 @@ union semun
 	}
 
 	// Espera filhos terminarem
-	waitpid(pidD);
-	waitpid(pidW);
+	waitpid(pidD, NULL, 0);
+	waitpid(pidW, NULL, 0);
 
 	printf("Seu saldo final é de %d\n", ap->balance);
 
 	// libera a area de memoria compartilhada
-	shctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
+	shmctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
 	semctl(semid, 0, IPC_RMID, un);
-	return;
+	return 0;
 
 
 }

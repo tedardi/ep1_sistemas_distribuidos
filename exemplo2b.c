@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-main() {
+int main(void) {
 	printf("PID do processo filho %d\n", getpid());
 	exit(0);
 }

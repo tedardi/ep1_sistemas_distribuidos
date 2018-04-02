@@ -2,10 +2,16 @@
 
 #include <stdio.h>
 
+// Tive que adicionar stdlib pois método exit pertence a ela
+#include <stdlib.h>
+
 // Para que serve isso?
 #include <unistd.h>
 
-main() {
+#include <sys/wait.h>
+
+// Tive que adicionar int como retorno de main
+int main(void) {
 	// singles module subtasking using fork()
 	int pid;
 	printf("\nAtual PID do pai: %d\n", getpid());
@@ -27,6 +33,9 @@ main() {
 	}
 
 	// Esperamos o PID que presenta o filho
-	waitpid(pid);
-	return;
+	// Tive que adicionar NULL e 0; NULL pois não importa o status que o filho retornou o 0 pois naõ quero modificar nenhuma opçõa. Seria interessante ir mais a fundo apra entender esses argumentos
+	waitpid(pid, NULL, 0);
+	
+	// Tive que adicionar 0 no return devido ao tipo de retorno do método main
+	return 0;
 }

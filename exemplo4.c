@@ -7,10 +7,12 @@
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-main() {
+int main(void) {
 	// Um filho muda uma variável na memoria compartilhada do pai
 
 	struct area { //area de memoria compartilhada
@@ -58,12 +60,12 @@ main() {
 	}
 	printf("Bye\n");
 
-	waitpid(pid);
+	waitpid(pid, NULL, 0);
 
 	// libera a area de memoria compartilhada
-	shctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
+	shmctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
 
-	return;
+	return 0;
 }
 
 // Tentar rodar sem o sleep 

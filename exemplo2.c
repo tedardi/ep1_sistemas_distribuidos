@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
-main() {
+int main(void) {
 	// usando fork() e execl()
 
 	int pid;
@@ -16,7 +18,7 @@ main() {
 		exit(-1);
 	}
 	printf("Pai aguardando\n");
-	waitpid(pid);
+	waitpid(pid, NULL, 0);
 	printf("Pai terminou aguardar\n");
-	return;
+	return 0;
 }

@@ -4,11 +4,23 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// Qual a diferença entre signal e sys/signal?
+// #include <signal.h>
+
 int count = 0; // contador para eventos ^C
 
-main() {
+// Tive que inveter a ordem da função para que control_C fosse reconhecido
+void control_C() {
+	signal(SIGINT, control_C);
+	count++;
+}
+
+int main(void) {
+
 	// Lida com sinais ^C digitados no teclado
 	signal(SIGINT, control_C);
+
+	// kill(pid, SIGNAL) - mandar sinal / só recomendado para pai filho devido a condições herediatária de "race conditions"
 
 	while(count < 3) {
 		printf("Digite ^C... ");
@@ -17,11 +29,6 @@ main() {
 		printf("Lidado com eventos #%d\n", count);
 	}
 	printf("3 eventos foram lidados\n");
-}
-
-void control_C() {
-	signal(SIGINT, control_C);
-	count++;
 }
 
 // Para testar precisa de uma outra janela (diferente processo) usar:
