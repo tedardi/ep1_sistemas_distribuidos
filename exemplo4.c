@@ -21,7 +21,10 @@ int main(void) {
 
 	int flag = (IPC_CREAT | IPC_EXCL | 0660);
 	int size = sizeof(struct area);
-	key_t key = 0x01020304; //exemplo
+	// key_t key = 0x01020304; //exemplo
+
+	// Só funcionou a 2ª vez qd mudei o numero do key
+	key_t key = 0x02030404; //exemplo
 	int shmid; //ID da area de memoria compartilhada
 	int pid; //id do processo filho
 

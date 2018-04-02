@@ -1,0 +1,6 @@
+
+Atual PID do pai: 10464
+
+Atual PID do filho: 10466
+
+Atual PID do pai: 10464

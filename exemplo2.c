@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+// Não esta funcionando como deveria
+
 int main(void) {
 	// usando fork() e execl()
 
@@ -13,7 +15,8 @@ int main(void) {
 		// Child task replaces itself with disk image of child
 		// Pesquisar função execl
 		// Requer um executável - mas nesse caso como vamos saber qd o pai morre? qd o executal termina?
-		execl("./exemplo2", "exemplo2", NULL);
+		// execl("./exemplo2b", "exemplo2b", NULL);
+		execl("./exemplo2b", "", NULL);
 		printf("Um execl de sucesso nunca irá retornar\n");
 		exit(-1);
 	}
