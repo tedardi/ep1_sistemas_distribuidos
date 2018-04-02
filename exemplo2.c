@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
-main() {
+// Não esta funcionando como deveria
+
+int main(void) {
 	// usando fork() e execl()
 
 	int pid;
@@ -11,12 +15,13 @@ main() {
 		// Child task replaces itself with disk image of child
 		// Pesquisar função execl
 		// Requer um executável - mas nesse caso como vamos saber qd o pai morre? qd o executal termina?
-		execl("./exemplo2", "exemplo2", NULL);
+		// execl("./exemplo2b", "exemplo2b", NULL);
+		execl("./exemplo2b", "", NULL);
 		printf("Um execl de sucesso nunca irá retornar\n");
 		exit(-1);
 	}
 	printf("Pai aguardando\n");
-	waitpid(pid);
+	waitpid(pid, NULL, 0);
 	printf("Pai terminou aguardar\n");
-	return;
+	return 0;
 }

@@ -7,10 +7,12 @@
 
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-main() {
+int main(void) {
 	// Um filho muda uma variável na memoria compartilhada do pai
 
 	struct area { //area de memoria compartilhada
@@ -19,7 +21,10 @@ main() {
 
 	int flag = (IPC_CREAT | IPC_EXCL | 0660);
 	int size = sizeof(struct area);
-	key_t key = 0x01020304; //exemplo
+	// key_t key = 0x01020304; //exemplo
+
+	// Só funcionou a 2ª vez qd mudei o numero do key
+	key_t key = 0x02030404; //exemplo
 	int shmid; //ID da area de memoria compartilhada
 	int pid; //id do processo filho
 
@@ -58,12 +63,12 @@ main() {
 	}
 	printf("Bye\n");
 
-	waitpid(pid);
+	waitpid(pid, NULL, 0);
 
 	// libera a area de memoria compartilhada
-	shctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
+	shmctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
 
-	return;
+	return 0;
 }
 
 // Tentar rodar sem o sleep 

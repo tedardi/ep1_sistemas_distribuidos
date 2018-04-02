@@ -9,10 +9,16 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <sys/sem.h>
+
+// Adicionado manualmente wait e stdlib
+#include <sys/wait.h>
 #include <stdio.h>
+
+#include <stdlib.h>
 #include <unistd.h>
 
-main() {
+int main(void) {
+	// printf("OLAAAAAAAAAAAAAA\n");
 	// Simultaneamente lidando com depositos e saques
 
 	struct area { //área de compartilhamento de meḿória
@@ -23,23 +29,33 @@ main() {
 
 #if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)\
 	// Union semun é normalmente definido qd inclui sys/sem
+	// printf("SEGUNDO TESTE\n");
 #else
+	// printf("TERCEIRO TESTE\n");
 	// Se não, temos que definir nós mesmos usando bits/sem.hold
-union semun
-{
-	int val; //valor para SETVAL
-	struct semid_ds *buf; //buffer para IPC_STAT, IPC_SET
-	unsigned short int *array; // array para GETALL, SETALL
-	struct seminfo *__buf; //buffer para IPC_INFO
-};
+	union semun
+	{
+		int val; //valor para SETVAL
+		struct semid_ds *buf; //buffer para IPC_STAT, IPC_SET
+		unsigned short int *array; // array para GETALL, SETALL
+		struct seminfo *__buf; //buffer para IPC_INFO
+	};
 #endif
 	union semun un; //semaforo uniao e buffer
 	struct sembuf buf;
 
 	int flag = (IPC_CREAT | IPC_EXCL | 0660);
 	int size = sizeof(struct area);
-	key_t skey = 0x04030201; //exemplos de chave
-	key_t mkey = 0x01020304;
+	// key_t skey = 0x04030201; //exemplos de chave
+	// key_t mkey = 0x01020304;
+
+	// Novas chaves
+	// key_t skey = 0x05060701; //exemplos de chave
+	// key_t mkey = 0x07060504;
+
+	// 3ªs chaves
+	key_t skey = 0x03040501; //exemplos de chave
+	key_t mkey = 0x05040304;
 
 	int semid; //id semafoto
 	int shmid; // id da memoria compartilhada
@@ -102,7 +118,7 @@ union semun
 		exit(0);
 	}
 
-	// Nao deveria ser pidW? - mudando para pidW apesar de no livro estar escrito pidD
+	// Nao deveria ser pidW? - MUDADO para pidW apesar de no livro estar escrito pidD
 	if((pidW = fork()) == 0) { //WITHDRAWALS
 
 		// anexa memoria compartilhada do pai
@@ -201,15 +217,15 @@ union semun
 	}
 
 	// Espera filhos terminarem
-	waitpid(pidD);
-	waitpid(pidW);
+	waitpid(pidD, NULL, 0);
+	waitpid(pidW, NULL, 0);
 
 	printf("Seu saldo final é de %d\n", ap->balance);
 
 	// libera a area de memoria compartilhada
-	shctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
+	shmctl(shmid, IPC_RMID, (struct shmid_ds *) 0);
 	semctl(semid, 0, IPC_RMID, un);
-	return;
+	return 0;
 
 
 }

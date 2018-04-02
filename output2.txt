@@ -1,0 +1,5 @@
+PID do processo filho 10469
+
+Atual PID do pai: 10468
+Pai aguardando
+Pai terminou aguardar
