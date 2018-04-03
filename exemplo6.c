@@ -2,14 +2,18 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
+#include <sys/wait.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
+// Adicionad int no main, 0 no return, stdlib e sys/wait + corrigido argumentos do waitpid
+
 char path[] = {"/tmp/socket3.3.6"}; /* socket name */
 
-main (void)
+int main (void)
 /*
 ** Listing3.6.c - UDP communication with forked subtask
 */
@@ -65,6 +69,6 @@ main (void)
 		}
 	}
 	/* await Child exit */
-	waitpid(pid);
-	return;
+	waitpid(pid, NULL, 0);
+	return 0;
 }

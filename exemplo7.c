@@ -1,15 +1,17 @@
-#include <netinet/.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 char path[] = {"/tmp/socket3.3.7"}; /* socket name */
 
-main(void)
+int main(void)
 /*
 **	Listing 3.7.c - TCP communication with forked subtask
 */
@@ -56,7 +58,8 @@ main(void)
 				perror("child: %s, recv()");
 				break;
 			}
-			printf("child: %s, buffer");
+			// printf("child: %s, buffer"); -- original
+			printf("child: %s", buffer); //provavelmente um erro de aspas no original
 			if(strncmp(buffer, "EXIT", 4) == 0) 	/* exit request */
 			{
 				unlink(path);
@@ -98,6 +101,6 @@ main(void)
 		}
 	}
 	/* await Child exit. */
-	waitpid(pid);
-	return;
+	waitpid(pid, NULL, 0);
+	return 0;
 }

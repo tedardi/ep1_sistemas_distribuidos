@@ -4,16 +4,21 @@
 #include <string.h>
 #include <netdb.h>
 #include <stdio.h>
+#include <stdlib.h>
 
+// Adiciona a biblioteca que conhece método close() de sockets
+#include <unistd.h>
 #define PORT 5678
 
-main(int argc, char *argv[])
-char *argv[];
-int argc;
+int main(int argc, char *argv[])
+// char *argv[];
+// int argc; - original, mas declaração fora do escopo da função não é mais interpretado por muitos compiladores devido dificultar leitura do código
 /*
 ** Listing 3.8a.c - sends UDP datagrams to a remote server
 */
 {
+	// char *argv[];
+	// int argc;
 	struct sockaddr_in sock;
 	struct hostent *hp;
 	int port = PORT;

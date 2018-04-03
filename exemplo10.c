@@ -7,11 +7,18 @@
 # include <netdb.h>
 # include <stdio.h>
 
+// Adicionad stdlib devido função exit
+#include <stdlib.h>
+
+// Adiciona a biblioteca que conhece método close() de sockets
+#include <unistd.h>
+
 # define PORT 4321
 
-main (argc, argv)
-	char *argv[];
-	int argc;
+// int main (argc, argv) - original
+int main (int argc, char *argv[])
+	// char *argv[];
+	// int argc;
 	/*
 	** Listing 3.9a.c - sends TPC packets to a remote server
 	*/
@@ -25,14 +32,16 @@ main (argc, argv)
 		/* server */
 		if(argc < 2)
 		{
-			printf("\n\tUsage: %s <IP_Addr>\n\n" argv[0]);
+			// printf("\n\tUsage: %s <IP_Addr>\n\n" argv[0]); -- original. Sem virgula separando o argumento
+			printf("\n\tUsage: %s <IP_Addr>\n\n", argv[0]); 
 			exit(-1);
 
 		}
 
 		/* get vitals regarding remote server */
 		strncpy(buffer, argv[1], sizeof(buffer));
-		if(hp = gethostbyname(buffer)) == NULL
+		// if(hp = gethostbyname(buffer)) == NULL -- original
+		if((hp = gethostbyname(buffer)) == NULL)
 		{
 			perror("client: gethostbyname()");
 			exit(-1);
@@ -50,7 +59,8 @@ main (argc, argv)
 		sock.sin_port = htons(port);
 
 		/* connect to remote server */
-		if (connect(fd, (struct sockaddr *) &sock, sizeof(sock) < 0)
+		// if (connect(fd, (struct sockaddr *) &sock, sizeof(sock) < 0) -- original com um parenteses a menos, mas precisa verificar aonde fica o parenteses faltando. Eu coloquei no final, mas nao tenho ctz
+		if (connect(fd, (struct sockaddr *) &sock, sizeof(sock) < 0))
 		{
 			perror ("client: connect()");
 			exit(-1);
@@ -66,10 +76,12 @@ main (argc, argv)
 			if(send(fd, buffer, strlen(buffer)+1, 0) <0)
 			{
 				perror("parent: send()");
-				exit(-1)
+				// Adicionado ponto e virgula
+				exit(-1);
 			}
 
-			if(strncmp(buffer "EXIT", 4) == 0) /* exit request */
+			// if(strncmp(buffer "EXIT", 4) == 0) /* exit request */ - original sem virgula entre buffer e exit
+			if(strncmp(buffer ,"EXIT", 4) == 0) /* exit request */
 			{
 				close(fd);
 				break;

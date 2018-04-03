@@ -3,9 +3,13 @@
 #include <netdb.h>
 #include <stdio.h>
 
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
 #define PORT 4321
 
-main(void)
+int main(void)
 /*
 ** Listing 3.9b.c - prints TCP packets from a remote client
 */
@@ -54,7 +58,7 @@ main(void)
 	while(1)
 	{
 		recv(soc, buffer, sizeof(buffer), 0);
-		printf("Server: %s, buffer");
+		printf("Server: %s", buffer);
 		if(strncmp(buffer, "EXIT", 4) == 0) /* exit request */
 		{
 			puts("Bye!");
