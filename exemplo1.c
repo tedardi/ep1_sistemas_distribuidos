@@ -21,6 +21,7 @@ Por isso só o pai consegue identificar o filho
 #include <stdlib.h>
 
 // Para que serve isso?
+// Define os métodos getpid() e fork()
 #include <unistd.h>
 
 #include <sys/wait.h>
@@ -43,15 +44,16 @@ int main(void) {
 		// Esse bloco só é executado pela subtask
 		printf("PID: %d\n",pid);
 		printf("Atual PID do filho: %d\n", getpid());
-
+		sleep(10);
+		printf("Filho agora morre\n");
 		// Finalizamos o processo filho
 		exit(0); 
 	}
 	printf("PAI esperando: %d\n",pid);
 	// Esperamos o PID que presenta o filho
 	// Tive que adicionar NULL e 0; NULL pois não importa o status que o filho retornou o 0 pois naõ quero modificar nenhuma opçõa. Seria interessante ir mais a fundo apra entender esses argumentos
-	waitpid(pid, NULL, 0);
-	
+	// waitpid(pid, NULL, 0);
+	printf("Pai morreu\n");
 	// Tive que adicionar 0 no return devido ao tipo de retorno do método main
 	return 0;
 }

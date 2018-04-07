@@ -1,4 +1,0 @@
-Digite ^C... Lidado com eventos #1
-Digite ^C... Lidado com eventos #2
-Digite ^C... Lidado com eventos #3
-3 eventos foram lidados
