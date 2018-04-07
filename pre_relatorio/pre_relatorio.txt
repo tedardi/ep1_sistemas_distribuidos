@@ -45,8 +45,10 @@ metodo waitpid() desatualizado
 
 
 Dia 1
-(Antonio) -
-Criado docker para manter coesão de maquina entre os membros do projeto. Foi utilizado uma imagem do gcc para gerar o código compilado
+Executando locamente no computador. Com todos os códigos em mãos, serão feitos alguns imports de bibliotecas, em alguns casos alguns métodos ou argumentos precisam ser ajustados. 
 
-> pendente pegar info dos sistema (nesse caso uma imagem de gcc possui qual OS rodando por trás?)
+Exemplo 1 precisou de pequenas ajustes nas bibliotecas e no exit. foram adicionados prints extras para indentificar qual o pai e qual o filho. Também foi explorada a página do MAN. Segue alguns exemplos abaixo: como pode ver ajustamos os prints para realmente comprovar que o filho é criado com PID -, mas que o sistema operacional gera uma versão 
 
+o Exemplo 2 é similar com exemplo um, com exceção que ele foi testado compilando em terminais difentes. Apesar de executar um outro
+
+Grandes mudanças no exemplo 3 sobre signals. Modificada a função para entender se reconhecia outro evento. Foi testado colocar um filho entre os processos kill. ficou bem organizado. Fizemos um caso que um kill é feito pai para filho, uma caso de input humano e um input feito de processo distintos para processos distintos. Mostrar fotos		
