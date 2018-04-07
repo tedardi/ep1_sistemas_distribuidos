@@ -1,0 +1,4 @@
+model name	: Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
+model name	: Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
+model name	: Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz
+model name	: Intel(R) Core(TM) i7-5500U CPU @ 2.40GHz

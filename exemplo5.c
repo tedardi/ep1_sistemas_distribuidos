@@ -16,9 +16,9 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 int main(void) {
-	// printf("OLAAAAAAAAAAAAAA\n");
 	// Simultaneamente lidando com depositos e saques
 
 	struct area { //área de compartilhamento de meḿória
@@ -46,16 +46,10 @@ int main(void) {
 
 	int flag = (IPC_CREAT | IPC_EXCL | 0660);
 	int size = sizeof(struct area);
-	// key_t skey = 0x04030201; //exemplos de chave
-	// key_t mkey = 0x01020304;
-
-	// Novas chaves
-	// key_t skey = 0x05060701; //exemplos de chave
-	// key_t mkey = 0x07060504;
-
-	// 3ªs chaves
-	key_t skey = 0x03040501; //exemplos de chave
-	key_t mkey = 0x05040304;
+	srand(time(NULL));
+	key_t skey = ftok("exemplo5", rand());
+	// key_t skey = 0x03040501; //exemplos de chave
+	key_t mkey = ftok("exemplo5", rand());
 
 	int semid; //id semafoto
 	int shmid; // id da memoria compartilhada

@@ -1,3 +1,18 @@
+/*
+RESUMO: Programa sempre faz o print do ID pai e do ID filho
+
+No linux ID do pai sempre 1 digito menor que o filho: e.g 7058 (PAI) 7059 (FILHO). IDs nao se repetem
+ 
+ Filho esta sempre executando dps do pai nos prints.
+ o PID igual a zero aparece no print caso seja feito dentro do IF
+
+Com o print do getpid() dentro do IF e um print do pid fora do if conseguimos ver exatamente o pai esperando o ID correto do filho.
+Outra coisa interessante, como o filho ficou com o pid = 0, então dentro do if pid = 0, mas para o sistema operacional, ele tem um numero de processo, que esta no processo do pai
+Por isso só o pai consegue identificar o filho
+
+*/
+
+
 //subtasking require a system call to create a indentical copy of your process
 
 #include <stdio.h>
@@ -26,12 +41,13 @@ int main(void) {
 
 	if((pid = fork()) == 0) {
 		// Esse bloco só é executado pela subtask
-		printf("\nAtual PID do filho: %d\n", getpid());
+		printf("PID: %d\n",pid);
+		printf("Atual PID do filho: %d\n", getpid());
 
 		// Finalizamos o processo filho
 		exit(0); 
 	}
-
+	printf("PAI esperando: %d\n",pid);
 	// Esperamos o PID que presenta o filho
 	// Tive que adicionar NULL e 0; NULL pois não importa o status que o filho retornou o 0 pois naõ quero modificar nenhuma opçõa. Seria interessante ir mais a fundo apra entender esses argumentos
 	waitpid(pid, NULL, 0);

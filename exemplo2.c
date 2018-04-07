@@ -1,3 +1,9 @@
+/*
+
+Maior lição desse exemplo - o PID é referente ao OS e não ao programa, então mesmo qd damos exec, o PID do programa é passado ao filho e o waitpid() funciona esperando o outro programa acabar
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -16,11 +22,17 @@ int main(void) {
 		// Pesquisar função execl
 		// Requer um executável - mas nesse caso como vamos saber qd o pai morre? qd o executal termina?
 		// execl("./exemplo2b", "exemplo2b", NULL);
-		execl("./exemplo2b", "", NULL);
+		int someInt = getpid();
+		char str[12];
+		sprintf(str, "%d", someInt);
+		// execvp("./exemplo2b", argv);
+		execl("./exemplo2b", str, NULL);
+		// execv("./exemplo2b", NULL);
 		printf("Um execl de sucesso nunca irá retornar\n");
 		exit(-1);
 	}
-	printf("Pai aguardando\n");
+
+	printf("Pai aguardando processo: %d\n", pid);
 	waitpid(pid, NULL, 0);
 	printf("Pai terminou aguardar\n");
 	return 0;

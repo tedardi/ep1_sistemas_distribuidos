@@ -2,7 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main(void) {
+int main(int argc, char **argv) {
+	// printf("#Argumentos %d\n", argc);
+	// printf("Argumento é: %s\n", argv[0]);
+	// printf("Primeira argumento %s", argv[0]);
 	printf("PID do processo filho %d\n", getpid());
 	exit(0);
 }
