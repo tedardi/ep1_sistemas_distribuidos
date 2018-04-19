@@ -58,7 +58,7 @@ int main(void) {
 		if(ap) {
 			printf("reconhece ap\n");
 			ap->value = 30;
-			printf("VALOR AP: %d", ap->value);
+			printf("VALOR AP: %d\n", ap->value);
 		}
 		else {
 			printf("nao reconhece ap\n");

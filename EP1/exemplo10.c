@@ -37,12 +37,18 @@ int main (int argc, char *argv[])
 			exit(-1);
 
 		}
-
+		else {
+			// printf("hellllllo2");
+			// printf("IP digitado %s\n", argv[1]);	
+		}
+		
 		/* get vitals regarding remote server */
 		strncpy(buffer, argv[1], sizeof(buffer));
+		// printf("BUFFER: %s\n",buffer);
 		// if(hp = gethostbyname(buffer)) == NULL -- original
 		if((hp = gethostbyname(buffer)) == NULL)
 		{
+			// printf("GET HOST:%s\n", gethostbyname(buffer));
 			perror("client: gethostbyname()");
 			exit(-1);
 		}
@@ -60,6 +66,7 @@ int main (int argc, char *argv[])
 
 		/* connect to remote server */
 		// if (connect(fd, (struct sockaddr *) &sock, sizeof(sock) < 0) -- original com um parenteses a menos, mas precisa verificar aonde fica o parenteses faltando. Eu coloquei no final, mas nao tenho ctz
+		// if (connect(fd, (struct sockaddr *) &sock, sizeof(sock)) < 0)
 		if (connect(fd, (struct sockaddr *) &sock, sizeof(sock) < 0))
 		{
 			perror ("client: connect()");

@@ -15,6 +15,7 @@ int main(void)
 */
 {
 	struct sockaddr_in sock;
+	memset((char *) &sock, 0, sizeof(sock));
 	int len = sizeof(sock);
 	struct hostent *hp;
 	int port = PORT;

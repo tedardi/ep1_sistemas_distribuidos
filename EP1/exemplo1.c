@@ -52,7 +52,7 @@ int main(void) {
 	printf("PAI esperando: %d\n",pid);
 	// Esperamos o PID que presenta o filho
 	// Tive que adicionar NULL e 0; NULL pois não importa o status que o filho retornou o 0 pois naõ quero modificar nenhuma opçõa. Seria interessante ir mais a fundo apra entender esses argumentos
-	// waitpid(pid, NULL, 0);
+	waitpid(pid, NULL, 0);
 	printf("Pai morreu\n");
 	// Tive que adicionar 0 no return devido ao tipo de retorno do método main
 	return 0;
