@@ -1,12 +1,26 @@
+/*
+** Este exemplo, correspondente ao 3.6 do capitulo 03 do livro do Alex Vrenios,comunica-se com subprocesos
+** através do UDP.
+*/
+
+
+// contem definicoes e estruturas para a comunicacao IP
 #include <netinet/in.h>
+// contem as implementacoes das estruturas dos sockets
 #include <sys/socket.h>
+// contem as definições dos tipos de dados usados nas chamadas de sistema
 #include <sys/types.h>
 #include <sys/un.h>
 #include <sys/wait.h>
+// contem as definicoes do tipo porta e ip que sao descritas em <netinet/in.h>.
 #include <netdb.h>
+// padrao para inputs e outputs
 #include <stdio.h>
+// adicionada pela funcao exit
 #include <stdlib.h>
+// usada por causa do metodo memset
 #include <string.h>
+// adicionada por conhecer o metodo close() de sockets
 #include <unistd.h>
 
 // Adicionad int no main, 0 no return, stdlib e sys/wait + corrigido argumentos do waitpid
@@ -14,9 +28,7 @@
 char path[] = {"/tmp/socket3.3.6"}; /* socket name */
 
 int main (void)
-/*
-** Listing3.6.c - UDP communication with forked subtask
-*/
+
 {
 	struct sockaddr_un sock;
 	int len = sizeof(sock);
@@ -58,7 +70,7 @@ int main (void)
 	{
 		sleep(1); /* response time */
 		printf("\nEnter a message: \n");
-		fflush(stdout);
+		fflush(stdout); /* limpa o buffer */
 		fgets(buffer, sizeof(buffer), stdin);
 		sendto(fd, buffer, strlen(buffer)+1, 0, (struct sockaddr *) &sock, sizeof(sock));
 

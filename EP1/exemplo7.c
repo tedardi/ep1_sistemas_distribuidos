@@ -1,12 +1,25 @@
+/*
+** Este exemplo, correspondente ao 3.7 do capitulo 03 do livro do Alex Vrenios,comunica-se com subprocesos
+** através do TCP.
+*/
+
+// contem definicoes e estruturas para a comunicacao IP
 #include <netinet/in.h>
+// contem as implementacoes das estruturas dos sockets
 #include <sys/socket.h>
+// contem as definições dos tipos de dados usados nas chamadas de sistema
 #include <sys/types.h>
 #include <sys/un.h>
+// contem as definicoes do tipo porta e ip que sao descritas em <netinet/in.h>.
 #include <netdb.h>
+// padrao para inputs e outputs
 #include <stdio.h>
+// usada por causa do metodo memset
 #include <string.h>
+// adicionada pela funcao exit
 #include <stdlib.h>
 #include <sys/wait.h>
+// adicionada por conhecer o metodo close() de sockets
 #include <unistd.h>
 
 char path[] = {"/tmp/socket3.3.7"}; /* socket name */
@@ -18,27 +31,28 @@ int main(void)
 {
 	struct sockaddr_un sock;
 	int len = sizeof (sock);
-	int pid; /* child task's process id */
-	int soc; /* socket file descriptor */
+	int pid; /* id do processo filho */
+	int soc; /* arquivo de descricao do socket */
 	char buffer[80];
 
-	/* establish and initialize TCP socket struct */
+	/* estabelece e inicializa um socket TCP */
 	if((soc = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
 	{
 		perror("Listing 3.7: socket()");
 		exit(-1);
 	}
+
 	memset((char *) &sock, 0, sizeof(sock));
 	strcpy(sock.sun_path, path);
 	sock.sun_family = AF_UNIX;
 
-	/* create child subtask */
+	/* cria um subprocesso filho */
 	if((pid = fork ()) == 0)
 	{
-		/* publish the socket name we listen to */
+		/* publica o nome do socjet quando o escuta */
 		bind(soc, (struct sockaddr *) &sock, len);
 
-		/* accept connection */
+		/* aceita a conexao */
 		if(listen (soc, 5) <0)
 		{
 			perror("Child: listen()");
@@ -86,7 +100,7 @@ int main(void)
 	{
 		sleep(1); /* response time */
 		printf("\nEnter a message: ");
-		fflush(stdout);
+		fflush(stdout); /* limpa o buffer */
 		fgets(buffer, sizeof(buffer), stdin);
 
 		if(send(soc, buffer, strlen(buffer)+1, 0) < 0)
