@@ -1,39 +1,98 @@
-/****************** CLIENT CODE ****************/
-
+#include <math.h>
 #include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/sockets.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
-int main(){
-  int clientSocket;
-  char buffer[1024];
-  struct sockaddr_in serverAddr;
-  socklen_t addr_size;
+#define PORT 9876
+#define NUM 50
 
-  /*---- Create the socket. The three arguments are: ----*/
-  /* 1) Internet domain 2) Stream socket 3) Default protocol (TCP in this case) */
-  clientSocket = socket(PF_INET, SOCK_STREAM, 0);
-  
-  /*---- Configure settings of the server address struct ----*/
-  /* Address family = Internet */
-  serverAddr.sin_family = AF_INET;
-  /* Set port number, using htons function to use proper byte order */
-  serverAddr.sin_port = htons(7891);
-  /* Set IP address to localhost */
-  serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-  /* Set all bits of the padding field to 0 */
-  memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
+main(int argc, char *argv[])
+{
 
-  /*---- Connect the socket to the server using the address struct ----*/
-  addr_size = sizeof serverAddr;
-  connect(clientSocket, (struct sockaddr *) &serverAddr, addr_size);
+  // Timer value before/after
+  struct timeval before, after;
 
-  /*---- Read the message from the server into the buffer ----*/
-  recv(clientSocket, buffer, 1024, 0);
+  // Socket structure
+  struct sockaddr_in sock;
 
-  /*---- Print the received message ----*/
-  printf("Data received: %s",buffer);   
+  // Structure for IP address
+  struct hostent *hp;
 
-  return 0;
+  double random;
+
+  // Time remaining in IAT (Inter-Arrival Time: how much time separates packets)
+  long timeleft;
+
+  // Inter-arrival time seconds
+  long secs=0L;
+
+  // Inter-arrival time microseconds
+  long usec=0L;
+
+  // Subtask process ids
+  int pids[NUM];
+
+  // Setsockopt parameter
+  int opt=1;
+
+  // Socket file descriptor
+  int fd;
+
+  int ii, jj, kk = 0;
+
+  char buf[80], *p;
+
+  // Seed rand()
+  srand((unsigned int) getpid());
+
+  // Operands are remote HOST name and IAT (Inter-arrival Time)
+  if(argc != 3)
+  {
+    printf("\n\tUsage: %s <HOST> <IAT>\n\n", argv[0]);
+    exit(-1);
+  }
+
+  // uSeconds part of inter-arrival
+  if((p=strchr(argv[2], '.')) != NULL)
+  {
+    // End whole number at decimal
+    *p = '\0';
+    // Bump pointer to start of mantissa
+    p++;
+
+    while(strlen(p) < 6)
+    {
+      // Pad out of 6 digits
+      strcat(p, "0");
+    }
+    // Truncate to 6 digits max
+    p[6] = '\0';
+    usec = atol(p);
+  }
+  // Seconds part of IAT
+  secs = atol(argv[2]);
+
+  // LOOP: send and receive NUM packets
+  for(ii=0; ii<NUM; ii++)
+  {
+    // get time before send
+    gettimeofday(&bef, NULL);
+
+    // random integer from 1 through 5
+    random = rand() / (double) RAND_MAX;
+    jj = (int) ((double) (5.0) * random) + 1;
+    if(jj == 6)
+      jj = 5;
+    sprintf(buf, "/tmp/sample.txt %d", jj);
+
+  }
+
+
+
 }
