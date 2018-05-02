@@ -5,14 +5,15 @@
 #include <string.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <sys/sockets.h>
+#include <sys/socket.h>
+#include <sys/wait.h>
 #include <netinet/in.h>
 #include <netdb.h>
 
 #define PORT 9876
 #define NUM 50
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
   // Timer value before/after
@@ -82,7 +83,7 @@ main(int argc, char *argv[])
   for(ii=0; ii<NUM; ii++)
   {
     // get time before send
-    gettimeofday(&bef, NULL);
+    gettimeofday(&before, NULL);
 
     // random integer from 1 through 5
     random = rand() / (double) RAND_MAX;
@@ -91,8 +92,71 @@ main(int argc, char *argv[])
       jj = 5;
     sprintf(buf, "/tmp/sample.txt %d", jj);
 
+    if((pids[kk++]=fork()) == 0)
+    {
+      // set up socket info for connect
+      fd = socket(AF_INET, SOCK_STREAM, 0);
+      memset((char *) &sock, 0, sizeof(sock));
+      hp = gethostbyname(argv[1]);
+      memcpy(&sock.sin_addr, hp->h_addr, hp->h_length);
+      sock.sin_family = hp->h_addrtype;
+      sock.sin_port = htons(PORT);
+      setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt));
+
+      // Connect to server
+      connect(fd, (struct sockaddr *) &sock, sizeof(sock));
+      send(fd, buf, strlen(buf) + 1, 0);
+
+      // Limpa buffer
+      buf[0] = 0;
+      recv(fd, buf, sizeof(buf), 0);
+
+      // Print out response to our query
+      printf("\tLine %d: '%s' ", jj, buf);
+      // Check the correct line
+      p = strrchr(buf, ' ') + 2;
+      if(jj != atoi(p))
+        printf("*");
+      printf("\n");
+      close(fd);
+      exit(0);
+    }
+
+    // Sleep for remainder of IAT
+    gettimeofday(&after, NULL);
+    after.tv_sec -= before.tv_sec;
+    after.tv_usec -= before.tv_usec;
+    if(after.tv_usec < 0L)
+    {
+      after.tv_usec += 1000000L;
+      after.tv_sec -= 1;
+    }
+    before.tv_sec = secs;
+    before.tv_usec = usec;
+    before.tv_sec -= after.tv_sec;
+    before.tv_usec -= after.tv_usec;
+
+    if(before.tv_usec < 0L)
+    {
+        before.tv_usec += 1000000L;
+        before.tv_sec -= 1;
+    }
+    timeleft = (before.tv_sec * 1000000L ) + before.tv_usec;
+    if(timeleft < 0)
+    {
+      printf("\tERROR: A higher IAT value is requisred - exiting.\n");
+      break;
+    }
+    usleep(timeleft);
+  }
+
+  for(ii=0; ii<kk; ii++)
+  {
+    waitpid(pids[ii], NULL, 0);
   }
 
 
+  puts("Done.");
 
+  return 0;
 }
