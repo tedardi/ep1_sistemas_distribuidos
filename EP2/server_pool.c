@@ -82,11 +82,17 @@ int main(void)
   acc = socket(AF_INET, SOCK_STREAM, 0);
 
   // bind socket to port
+
+  //REUSE IMPORTANTE PARA NÃO BLOQUEAR A PORTA
+  int reuse = 1;
   sock.sin_family = AF_INET;
   sock.sin_port = htons(PORT);
   sock.sin_addr.s_addr = htonl(INADDR_ANY);
-  bind(acc, (struct sockaddr *) &sock, socklen);
-  setsockopt(acc, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt));
+  if(setsockopt(acc, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt)) == -1)
+    printf("Não conseguiu reutilizar a porta\n");
+  if(bind(acc, (struct sockaddr *) &sock, socklen) == -1)
+    printf("ERROR, cannot bind the port\n");
+  //bind(acc, (struct sockaddr *) &sock, socklen);
   listen(acc, 5);
 
   // Get the shared memory area

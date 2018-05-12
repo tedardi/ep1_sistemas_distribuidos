@@ -44,8 +44,8 @@ int main(void)
   sock.sin_family = AF_INET;
   sock.sin_port = htons(PORT);
   sock.sin_addr.s_addr = htonl(INADDR_ANY);
-  bind(acc, (struct sockaddr *) &sock, socklen);
   setsockopt(acc, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt));
+  bind(acc, (struct sockaddr *) &sock, socklen);
 
   while(1)
   {
