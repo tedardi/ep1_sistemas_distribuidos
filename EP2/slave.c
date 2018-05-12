@@ -42,6 +42,7 @@ int main(void)
   sendto(fd, buf, strlen(buf) + 1, 0, (struct sockaddr *) &sock, sizeof(sock));
 
   // Further processing
+  printf("Sou um escravo em execucao!!\n");
 
   close(fd);
   return 0;
