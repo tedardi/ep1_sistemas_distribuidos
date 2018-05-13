@@ -12,6 +12,7 @@
 // Server: subtask per query
 int main(void)
 {
+  printf("Hello World");
   // Structure for socket()
   struct sockaddr_in sock;
   // Structure len for aceept()
@@ -48,11 +49,33 @@ int main(void)
   setsockopt(acc, SOL_SOCKET, SO_REUSEADDR, (char *) &opt, sizeof(opt));
   bind(acc, (struct sockaddr *) &sock, socklen);
 
-  while(1)
-  {
-    // await connection from remote client
+  int i = 0;
+  while(i < 100){
+    printf("\nLoop %d\n", i);
+    i++;
+
+     // await connection from remote client
     cli = accept(acc, (struct sockaddr *) &sock, &socklen);
 
+    if(fork() == 0){
+      printf("\nCheguei na ausência de fork\n\n");
+      recv(cli, buf, sizeof(buf), 0);
+      // Open the requested file
+        sscanf(buf, "%s %d", file, &line);
+        fp = fopen(file, "r");
+        while(line--)
+          fgets(buf, sizeof(buf), fp);
+        fclose(fp);
+        buf[strlen(buf)-1] = '\0';
+        send(cli, buf, strlen(buf)+1, 0);
+        close(cli);
+        exit(0);
+    }
+    close(cli);
+  }
+  /*  
+  {
+    
     // get a random line of data requested by the client
     if(fork() == 0)
     {
@@ -71,5 +94,5 @@ int main(void)
         exit(0);
     }
     close(cli);
-  }
+  }*/
 }
